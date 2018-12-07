@@ -50,69 +50,49 @@ class CategoriaController
         View::carregar('view/categoria/incluir.html');
         View::carregar('view/template/rodape.html');
     }
-
-    // Recebendo objeto categoria e chamando o método insert do CategoriaDAO
     public function inserir($categoria){
         $catdao = new CategoriaDAO();
-        if ($catdao->insert($categoria)){
-            header('Location: index.php');
-        } else {
-            echo "Erro ao inserir.";
+        try{
+            $catdao->insert($categoria);
+            header('location: index.php');
+        }catch (PDOException $e){
+            echo $e->getMessage();
         }
     }
 
-    // Atualizar
     public function atualizar($id){
         $this->dados = array();
         $catdao = new CategoriaDAO();
 
-        try {
+        try{
             $categorias = $catdao->select($id);
-        } catch (PDOException $e){
-            echo "Erro: ". $e->getMessage();
+        }catch (PDOException $e){
+            echo "Erro: ".$e->getMessage();
         }
-
         $this->dados['categorias'] = $categorias;
 
         View::carregar('view/template/cabecalho.html');
         View::carregar('view/categoria/atualizar.php', $this->dados);
         View::carregar('view/template/rodape.html');
-    }
 
-    public function gravaAtualizar($categoriaNova){
+    }
+    public function gravaAtualizar($categoria){
         $catdao = new CategoriaDAO();
-        if ($catdao->update($categoriaNova)) {
-            header('Location: index.php');
-        } else {
-            echo "Erro ao atualizar.";
+        try{
+            $catdao->update($categoria);
+            header('location: index.php');
+        }catch (PDOException $e){
+            echo $e->getMessage();
         }
     }
+    public function excluir($id){
 
-    // Excluir
-    public function excluir ($id){
-        $this->dados = array();
         $catdao = new CategoriaDAO();
-
-        try {
-            $categorias = $catdao->select($id);
-        } catch (PDOException $e){
-            echo "Erro: " . $e->getMessage();
-        }
-
-        $this->dados['categorias'] = $categorias;
-
-        View::carregar('view/template/cabecalho.html');
-        View::carregar('view/categoria/excluir.php', $this->dados);
-        View::carregar('view/template/rodape.html');
-    }
-
-    public function confExcluir($categoriaNova){
-        $catdao = new CategoriaDAO();
-        if ($catdao->delete($categoriaNova)){
-            header('Location: index.php');
-        } else {
-            echo "Erro ao atualizar.";
+        try{
+            $catdao->delete($id);
+            header('location: index.php');
+        }catch (PDOException $e){
+            echo $e->getMessage();
         }
     }
-
 }
