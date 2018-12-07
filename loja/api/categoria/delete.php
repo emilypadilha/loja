@@ -16,5 +16,5 @@ $id = $dados['id'];
 // Instanciando categoriaDAO
 $catdao = new CategoriaDAO();
 
-// Chamando a função de update de CategoriaDAO
+// Chamando a função de delete de CategoriaDAO
 $catdao->delete($id);
